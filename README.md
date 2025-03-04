@@ -1,54 +1,49 @@
-Here's the **human-written** README for your **AWS Serverless Job Portal** project:  
-
----
-
 # **AWS Serverless Job Portal 🚀**  
 
-This is a **serverless job portal** built with AWS services, designed to be scalable and cost-efficient. The portal allows users to **view job listings** and **add new jobs**, using a fully managed backend with **Lambda, API Gateway, and DynamoDB**. The frontend is hosted on **S3**, and **CloudFront** ensures secure HTTPS access.  
-
-## **🛠️ Tech Stack**  
-- **S3** → Hosts the frontend (HTML, CSS, JavaScript)  
-- **DynamoDB** → Stores job listings  
-- **Lambda** → Handles backend logic (GET & POST jobs)  
-- **API Gateway (REST API)** → Exposes Lambda functions as HTTP endpoints  
-- **CloudFront** → Enables HTTPS and improves performance  
+This is a **serverless job portal** built using AWS services:  
+- **S3** → Hosts the frontend (HTML, CSS, JavaScript).  
+- **DynamoDB** → Stores job listings.  
+- **Lambda** → Handles API logic (GET & POST jobs).  
+- **API Gateway (REST API)** → Exposes Lambda functions via HTTP endpoints.  
+- **CloudFront** → Provides HTTPS and improves performance.  
 
 ---
 
 ## **📌 Features**  
-✅ Fetch and display job listings  
-✅ Add new job postings dynamically  
-✅ HTTPS-secured frontend with CloudFront  
-✅ Fully serverless and scalable architecture  
+✅ List available jobs.  
+✅ Add new job listings.  
+✅ Secure HTTPS access via CloudFront.  
+✅ Fully serverless, scalable, and cost-effective.  
 
 ---
 
-## **1️⃣ Setting Up AWS Services**  
+## **1️⃣ Setup AWS Services**  
 
-### **🖥️ 1.1 Create an S3 Bucket (Frontend Hosting)**  
-1. Go to **AWS S3 Console** → Click **Create Bucket**.  
-2. **Disable "Block Public Access"** (uncheck all options).  
-3. In the **Properties** tab, enable **Static Website Hosting**.  
-4. Upload `index.html` and `script.js`.  
-5. Note the **S3 website URL** (e.g., `http://your-bucket.s3-website-us-east-1.amazonaws.com`).  
+### **🖥️ 1.1 Create an S3 Bucket for Static Website Hosting**  
+1. Go to **AWS S3 Console** → **Create bucket**.  
+2. **Disable Block Public Access** (uncheck all options).  
+3. **Enable Static Website Hosting** under the **Properties** tab.  
+4. Upload `index.html`, `script.js`, and other frontend files.  
+5. Note the **S3 website endpoint URL** (e.g., `http://your-bucket.s3-website-us-east-1.amazonaws.com`).  
 
 ---
 
 ### **🛠️ 1.2 Setup DynamoDB (Job Storage)**  
-1. Open **AWS DynamoDB Console** → Click **Create Table**.  
-2. Table Name: `JobTable`  
-3. Primary Key: `jobId` (String)  
+1. Go to **AWS DynamoDB Console** → **Create table**.  
+2. Table name: `JobTable`  
+3. Primary key: `jobId` (String).  
 4. Click **Create**.  
 
 ---
 
 ### **📝 1.3 Create Lambda Functions (Backend Logic)**  
 
-#### **📌 1.3.1 Lambda for Fetching Jobs (GET)**  
-1. Open **AWS Lambda Console** → Click **Create Function**.  
-2. Name: `GetJobsLambda`, Runtime: **Python 3.9**.  
-3. Assign **AWSLambdaBasicExecutionRole** & **DynamoDB Read Access**.  
-4. Add the following code:  
+#### **📌 1.3.1 Create Lambda for Fetching Jobs (GET)**  
+1. Go to **AWS Lambda Console** → **Create Function**.  
+2. Runtime: **Python 3.9**.  
+3. Name: `GetJobsLambda`.  
+4. Assign an **IAM role** with **DynamoDB read access**.  
+5. Add this code:  
 
 ```python
 import json
@@ -68,11 +63,12 @@ def lambda_handler(event, context):
 
 ---
 
-#### **📌 1.3.2 Lambda for Adding Jobs (POST)**  
-1. Go to **AWS Lambda Console** → Click **Create Function**.  
-2. Name: `PostJobsLambda`, Runtime: **Python 3.9**.  
-3. Assign **AWSLambdaBasicExecutionRole** & **DynamoDB Write Access**.  
-4. Add the following code:  
+#### **📌 1.3.2 Create Lambda for Adding Jobs (POST)**  
+1. Go to **AWS Lambda Console** → **Create Function**.  
+2. Runtime: **Python 3.9**.  
+3. Name: `PostJobsLambda`.  
+4. Assign an **IAM role** with **DynamoDB full access**.  
+5. Add this code:  
 
 ```python
 import json
@@ -101,37 +97,34 @@ def lambda_handler(event, context):
 ---
 
 ### **🌐 1.4 Setup API Gateway (REST API)**  
-1. Open **AWS API Gateway Console** → Click **Create REST API**.  
-2. **Create a Resource** → `/jobs`.  
+1. Go to **AWS API Gateway Console** → **Create REST API**.  
+2. **Create Resource** → `/jobs`.  
 3. Add **Methods**:  
-   - **GET** → Integrate with `GetJobsLambda`.  
-   - **POST** → Integrate with `PostJobsLambda`.  
-
-4. **Enable CORS for `/jobs`**:  
-   - Allowed Origins: `*`  
-   - Allowed Methods: `GET, POST`  
-   - Headers: `Content-Type`  
-
-5. Deploy the API → **Create a new stage (prod)**.  
-6. Copy the **API Invoke URL** (e.g., `https://xyz.execute-api.us-east-1.amazonaws.com/prod/jobs`).  
+   - **GET** → Lambda Integration (`GetJobsLambda`).  
+   - **POST** → Lambda Integration (`PostJobsLambda`).  
+4. Enable **CORS** for `/jobs`:  
+   - Allowed Origins: `*`.  
+   - Allowed Methods: `GET, POST`.  
+   - Headers: `Content-Type`.  
+5. Deploy API → Create a new **Stage (prod)**.  
+6. Copy the API **Invoke URL** (e.g., `https://xyz.execute-api.us-east-1.amazonaws.com/prod/jobs`).  
 
 ---
 
 ### **🔒 1.5 Setup CloudFront (HTTPS & CDN)**  
-1. Open **AWS CloudFront Console** → Click **Create Distribution**.  
-2. **Origin Domain**: Use your **S3 static website URL**.  
-3. **Origin Protocol Policy**: Set to **HTTP Only**.  
-4. **Viewer Protocol Policy**: Select **Redirect HTTP to HTTPS**.  
-5. **Cache Policy**: Use default settings.  
-6. **SSL Certificate**: Request a free certificate via **AWS Certificate Manager (ACM)**.  
+1. Go to **AWS CloudFront Console** → **Create Distribution**.  
+2. **Origin Domain**: Use your S3 static website URL.  
+3. **Origin Protocol Policy**: HTTP Only.  
+4. **Viewer Protocol Policy**: Redirect HTTP to HTTPS.  
+5. **Cache Policy**: Use default caching.  
+6. **SSL Certificate**: Use AWS Certificate Manager (ACM) to request a free certificate.  
 7. Click **Create** and wait (~10 min) for deployment.  
-8. Copy the **CloudFront URL** (e.g., `https://dxyz.cloudfront.net`).  
+8. Note down the **CloudFront URL** (e.g., `https://dxyz.cloudfront.net`).  
 
 ---
 
-## **2️⃣ Update the Frontend Code**  
-
-Edit `index.html` to use the **CloudFront URL** and **API Gateway URL**:  
+## **2️⃣ Update Frontend Code**  
+Edit `index.html` to use the **CloudFront URL** and **API Gateway Endpoint**:  
 
 ```html
 <script>
@@ -150,16 +143,16 @@ Edit `index.html` to use the **CloudFront URL** and **API Gateway URL**:
 ```
 
 1. Upload `index.html` to **S3**.  
-2. Open your **CloudFront URL** to test the website.  
+2. Open the **CloudFront URL** in your browser.  
 
 ---
 
-## **3️⃣ Cleaning Up (Avoid Charges)**  
-If you **don’t want charges**, delete the following AWS resources:  
-✅ **CloudFront Distribution**  
-✅ **API Gateway**  
-✅ **Lambda Functions**  
-✅ **DynamoDB Table**  
-✅ **S3 Bucket**  
+## **3️⃣ Clean-Up (Avoid Charges)**  
+If you **don’t want charges**, delete unused AWS resources:  
+✅ **S3 Bucket** (if not needed).  
+✅ **DynamoDB Table** (if no longer used).  
+✅ **Lambda Functions** (`GetJobsLambda`, `PostJobsLambda`).  
+✅ **API Gateway** (delete the API).  
+✅ **CloudFront Distribution** (if HTTPS is no longer required).  
 
 ---
