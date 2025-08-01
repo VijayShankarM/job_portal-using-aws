@@ -2,48 +2,48 @@ import json
 import boto3
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('JobTable')  # Replace with your actual table name
+table = dynamodb.Table('CourseTable')  # 🗂 Renamed from JobTable
 
 def lambda_handler(event, context):
     try:
         method = event['httpMethod']
         body = json.loads(event['body'])
-        
+
         if method == 'PUT':
             if isinstance(body, list):
                 body = body[0]  # Handle array input like [ {...} ]
-            
-            job_id = body.get('jobId')
+
+            course_id = body.get('courseId')
             title = body.get('title')
             description = body.get('description')
-            company = body.get('company')
+            instructor = body.get('instructor')
             deadline = body.get('deadline')
 
-            if not job_id:
-                return respond(400, {'error': 'Missing jobId for update'})
+            if not course_id:
+                return respond(400, {'error': 'Missing courseId for update'})
 
             # Update item in DynamoDB
             response = table.update_item(
-                Key={'jobId': job_id},
-                UpdateExpression="SET title = :t, description = :d, company = :c, deadline = :dl",
+                Key={'courseId': course_id},
+                UpdateExpression="SET title = :t, description = :d, instructor = :i, deadline = :dl",
                 ExpressionAttributeValues={
                     ':t': title,
                     ':d': description,
-                    ':c': company,
+                    ':i': instructor,
                     ':dl': deadline
                 },
                 ReturnValues="UPDATED_NEW"
             )
 
-            return respond(200, {'message': 'Job updated', 'updatedAttributes': response.get('Attributes')})
+            return respond(200, {'message': 'Course updated', 'updatedAttributes': response.get('Attributes')})
 
         elif method == 'DELETE':
-            job_id = body.get('jobId')
-            if not job_id:
-                return respond(400, {'error': 'Missing jobId for deletion'})
+            course_id = body.get('courseId')
+            if not course_id:
+                return respond(400, {'error': 'Missing courseId for deletion'})
 
-            table.delete_item(Key={'jobId': job_id})
-            return respond(200, {'message': 'Job deleted'})
+            table.delete_item(Key={'courseId': course_id})
+            return respond(200, {'message': 'Course deleted'})
 
         else:
             return respond(405, {'error': 'Method not allowed'})
