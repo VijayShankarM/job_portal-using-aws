@@ -3,14 +3,14 @@ import boto3
 import uuid
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('JobTable')
+table = dynamodb.Table('CourseTable')  # Renamed from JobTable
 
 def lambda_handler(event, context):
     try:
         if event['httpMethod'] == 'POST':
             body = json.loads(event['body'])
-            job_id = str(uuid.uuid4())  # Generate a unique ID
-            body['jobId'] = job_id  # Add jobId to item
+            course_id = str(uuid.uuid4())  # Generate a unique ID
+            body['courseId'] = course_id  # Add courseId to item
             table.put_item(Item=body)
 
             return {
@@ -21,7 +21,7 @@ def lambda_handler(event, context):
                     'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
                     'Access-Control-Allow-Headers': 'Content-Type'
                 },
-                'body': json.dumps({'message': 'Job added successfully', 'jobId': job_id})
+                'body': json.dumps({'message': 'Course added successfully', 'courseId': course_id})
             }
 
         return {
