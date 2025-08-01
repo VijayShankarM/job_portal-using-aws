@@ -2,11 +2,11 @@ import json
 import boto3
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('JobTable')  # Ensure this matches your actual table name
+table = dynamodb.Table('CourseTable')  # 🗂 Renamed from JobTable
 
 def lambda_handler(event, context):
     try:
-        # Fetch all job listings from DynamoDB
+        # Fetch all course listings from DynamoDB
         response = table.scan()
 
         return {
