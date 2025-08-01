@@ -1,383 +1,740 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Manage Products</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.3s ease;
-        }
-        h1 {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            transition: background-color 0.3s ease;
-        }
-        form {
-            background: white;
-            padding: 20px;
-            margin: 20px auto;
-            width: 300px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-        }
-        form:hover {
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
-        input, button, textarea {
-            width: 100%;
-            margin: 5px 0;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            transition: border-color 0.3s ease;
-        }
-        input:focus, button:focus, textarea:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-        button {
-            background-color: #28a745; /* Green for Add Product */
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #218838;
-            transform: scale(1.05);
-        }
-        button:active {
-            background-color: #1e7e34;
-            transform: scale(1);
-        }
-        #message {
-            display: none;
-            padding: 10px;
-            margin: 10px auto;
-            width: 300px;
-            border-radius: 5px;
-            text-align: center;
-        }
-        #message.success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        #message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        table {
-            width: 80%; /* Increase the width of the table */
-            margin: 20px auto;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: left;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        .action-button {
-            padding: 5px 10px; /* Reduced size */
-            font-size: 14px; /* Reduced size */
-        }
-        .action-button.edit {
-            background-color: #007bff; /* Blue for Edit */
-        }
-        .action-button.edit:hover {
-            background-color: #0056b3;
-        }
-        .action-button.delete {
-            background-color: #ff0000; /* Red for Delete */
-        }
-        .action-button.delete:hover {
-            background-color: #cc0000;
-        }
-        /* New styles for orders section */
-        #orders {
-            width: 80%;
-            margin: 20px auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .order-box {
-            border: 1px solid #ccc;
-            margin: 10px;
-            padding: 10px;
-            background: #fff;
-            border-radius: 5px;
-            width: 100%;
-            max-width: 600px;
-            text-align: left;
-        }
-        .order-box h3 {
-            margin: 0 0 10px 0;
-            font-size: 18px;
-        }
-        .order-box p {
-            margin: 5px 0;
-        }
-        .order-box ul {
-            padding-left: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – Job Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .section h2 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #f7fafc;
+    }
+
+    .section h2 i {
+      color: #667eea;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #2d3748;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-control::placeholder {
+      color: #a0aec0;
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+    }
+
+    .btn-success:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(245, 101, 101, 0.4);
+    }
+
+    .job-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .job-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      border-color: #667eea;
+    }
+
+    .job-card .form-control {
+      margin-bottom: 8px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+
+    .job-card .form-group {
+      margin-bottom: 12px;
+    }
+
+    .job-card .form-group label {
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .job-card .btn {
+      margin-right: 8px;
+      margin-bottom: 8px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+    }
+
+    .jobs-container {
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .jobs-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .jobs-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+
+    .jobs-container::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+    }
+
+    .jobs-container::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
+    .application-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .application-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .app-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .app-contact {
+      color: #667eea;
+      font-weight: 500;
+    }
+
+    .app-details {
+      color: #4a5568;
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    .app-details span {
+      display: inline-block;
+      margin-right: 20px;
+      margin-bottom: 5px;
+    }
+
+    .app-details i {
+      color: #667eea;
+      margin-right: 5px;
+    }
+
+    .resume-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: #edf2f7;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .resume-link:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .loading {
+      text-align: center;
+      color: #4a5568;
+      font-style: italic;
+      padding: 40px;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .success-message {
+      background: #c6f6d5;
+      color: #22543d;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #48bb78;
+    }
+
+    .error-message {
+      background: #fed7d7;
+      color: #742a2a;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #e53e3e;
+    }
+
+    .applications-section {
+      grid-column: 1 / -1;
+    }
+
+    /* Delete Confirmation Modal */
+    .delete-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      backdrop-filter: blur(5px);
+    }
+
+    .delete-modal-content {
+      background: white;
+      margin: 15% auto;
+      padding: 30px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .delete-modal h3 {
+      color: #2d3748;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .delete-modal p {
+      color: #4a5568;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .delete-modal-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .btn-cancel {
+      background: #e2e8f0;
+      color: #4a5568;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .btn-cancel:hover {
+      background: #cbd5e0;
+      transform: translateY(-1px);
+    }
+
+    .btn-confirm-delete {
+      background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .btn-confirm-delete:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(245, 101, 101, 0.4);
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      .section {
+        padding: 20px;
+      }
+
+      .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .job-card .btn {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+  </style>
 </head>
 <body>
-
-    <h1>Admin Panel - Manage Products</h1>
-
-    <form id="addProductForm">
-        <h2>Add Product</h2>
-        <input type="text" id="productName" placeholder="Product Name" required>
-        <input type="number" id="productPrice" placeholder="Price" required>
-        <input type="number" id="productStock" placeholder="Stock Quantity" required>
-        <input type="text" id="productImageUrl" placeholder="Image URL" required>
-        <button type="submit">Add Product</button>
-    </form>
-
-    <div id="message"></div>
-
-    <h2>Products</h2>
-
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Product ID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Image</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="productTableBody"></tbody>
-    </table>
-
-    <!-- Placed Orders Section -->
-    <h2>📦 Placed Orders</h2>
-    <div id="orders"></div>
-
-    <!-- Edit Product Modal -->
-    <div id="editModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black;">
-        <h3>Edit Product</h3>
-        <input type="hidden" id="editProductId"> <!-- Hidden field for Product ID -->
-        <div style="display: flex; align-items: center; margin-bottom: 10px;">
-            <label style="width: 100px;">Name:</label>
-            <input type="text" id="editName" style="flex: 1;">
-        </div>
-        <div style="display: flex; align-items: center; margin-bottom: 10px;">
-            <label style="width: 100px;">Price:</label>
-            <input type="number" id="editPrice" style="flex: 1;">
-        </div>
-        <div style="display: flex; align-items: center; margin-bottom: 10px;">
-            <label style="width: 100px;">Stock:</label>
-            <input type="number" id="editStock" style="flex: 1;">
-        </div>
-        <div style="display: flex; align-items: center; margin-bottom: 10px;">
-            <label style="width: 100px;">Image URL:</label>
-            <input type="text" id="editImageUrl" style="flex: 1;">
-        </div>
-        <img id="editPreviewImage" src="" alt="Product Image" style="width: 150px; height: auto; display: none; margin-bottom: 10px;">
-        <button onclick="updateProduct()">Save</button>
-        <button onclick="closeEditModal()">Cancel</button>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-user-shield"></i> Admin Dashboard</h1>
+      <p>Manage jobs and applications for the Job Portal</p>
     </div>
 
-    <script>
-        const apiUrl = "https://bb9d35alf6.execute-api.us-east-1.amazonaws.com/prod/products";
+    <div class="dashboard">
+      <div class="section">
+        <h2><i class="fas fa-plus-circle"></i> Post a New Job</h2>
+        <form id="jobForm">
+          <div class="form-group">
+            <label for="title">Job Title *</label>
+            <input type="text" id="title" class="form-control" placeholder="Enter job title" required>
+          </div>
 
-        async function fetchProducts() {
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error("Failed to fetch products");
+          <div class="form-group">
+            <label for="description">Job Description *</label>
+            <textarea id="description" class="form-control" placeholder="Enter detailed job description" required></textarea>
+          </div>
 
-                const products = await response.json();
-                const productTableBody = document.getElementById("productTableBody");
-                productTableBody.innerHTML = ""; // Clear previous entries
+          <div class="form-group">
+            <label for="company">Company Name *</label>
+            <input type="text" id="company" class="form-control" placeholder="Enter company name" required>
+          </div>
 
-                if (products.length === 0) {
-                    productTableBody.innerHTML = "<tr><td colspan='6'>No products available.</td></tr>";
-                    return;
-                }
+          <div class="form-group">
+            <label for="deadline">Application Deadline</label>
+            <input type="date" id="deadline" class="form-control">
+          </div>
 
-                products.forEach(product => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${product.productId}</td>
-                        <td>${product.name}</td>
-                        <td>₹${product.price}</td>
-                        <td>${product.stock}</td>
-                        <td><img src="${product.imageUrl}" alt="Product Image" style="width: 50px; height: auto;"></td>
-                        <td>
-                            <button class="action-button edit" onclick="openEditModal('${product.productId}', '${product.name}', ${product.price}, ${product.stock}, '${product.imageUrl}')">Edit</button>
-                            <button class="action-button delete" onclick="deleteProduct('${product.productId}')">Delete</button>
-                        </td>
-                    `;
-                    productTableBody.appendChild(row);
-                });
-            } catch (error) {
-                document.getElementById("productTableBody").innerHTML = "<tr><td colspan='6' class='error'>Error loading products.</td></tr>";
-                console.error("Error fetching products:", error);
-            }
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Job
+          </button>
+        </form>
+      </div>
+
+      <div class="section">
+        <h2><i class="fas fa-briefcase"></i> All Jobs</h2>
+        <div id="jobs" class="loading">
+          <div class="loading-spinner"></div> Loading jobs...
+        </div>
+      </div>
+
+      <div class="section applications-section">
+        <h2><i class="fas fa-users"></i> Applications</h2>
+        <div id="applications" class="loading">
+          <div class="loading-spinner"></div> Loading applications...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="delete-modal">
+    <div class="delete-modal-content">
+      <h3>Confirm Deletion</h3>
+      <p id="deleteModalText">Are you sure you want to delete this job? This action cannot be undone.</p>
+      <div class="delete-modal-buttons">
+        <button class="btn btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-confirm-delete" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'https://aej3wzoqk6.execute-api.us-east-1.amazonaws.com/prob';
+
+    function showMessage(message, type = 'success') {
+      // Create a temporary message element
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `${type}-message`;
+      messageDiv.textContent = message;
+      messageDiv.style.position = 'fixed';
+      messageDiv.style.top = '20px';
+      messageDiv.style.right = '20px';
+      messageDiv.style.zIndex = '1000';
+      messageDiv.style.minWidth = '300px';
+      
+      document.body.appendChild(messageDiv);
+      
+      setTimeout(() => {
+        messageDiv.remove();
+      }, 3000);
+    }
+
+    async function fetchJobs() {
+      try {
+        const res = await fetch(`${API}/jobs`);
+        const jobs = await res.json();
+        const container = document.getElementById('jobs');
+        
+        if (jobs.length === 0) {
+          container.innerHTML = '<p style="text-align: center; color: #4a5568; padding: 40px;">No jobs posted yet.</p>';
+          return;
         }
 
-        async function deleteProduct(productId) {
-            try {
-                const response = await fetch(`${apiUrl}/${productId}`, { method: "DELETE" });
-                if (!response.ok) throw new Error("Failed to delete product");
-                showMessage("Product deleted successfully!", "success");
-                fetchProducts();
-            } catch (error) {
-                console.error("Error deleting product:", error);
-                showMessage("Error deleting product: " + error.message, "error");
-            }
-        }
-
-        document.getElementById("addProductForm").addEventListener("submit", async function (event) {
-            event.preventDefault();
-
-            const productData = {
-                productId: Date.now().toString(),
-                name: document.getElementById("productName").value,
-                price: parseFloat(document.getElementById("productPrice").value),
-                stock: parseInt(document.getElementById("productStock").value),
-                imageUrl: document.getElementById("productImageUrl").value
-            };
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(productData)
-                });
-
-                if (!response.ok) {
-                    throw new Error("Failed to add product");
-                }
-
-                showMessage("Product added successfully!", "success");
-                fetchProducts();
-            } catch (error) {
-                console.error("Error adding product:", error);
-                showMessage("Error adding product: " + error.message, "error");
-            }
+        container.innerHTML = '';
+        const jobsContainer = document.createElement('div');
+        jobsContainer.className = 'jobs-container';
+        
+        jobs.forEach(job => {
+          const div = document.createElement('div');
+          div.className = 'job-card';
+          div.innerHTML = `
+            <div class="form-group">
+              <label>Job Title</label>
+              <input type="text" id="title-${job.jobId}" class="form-control" value="${job.title}" />
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="desc-${job.jobId}" class="form-control">${job.description}</textarea>
+            </div>
+            <div class="form-group">
+              <label>Company</label>
+              <input type="text" id="company-${job.jobId}" class="form-control" value="${job.company || ''}" />
+            </div>
+            <div class="form-group">
+              <label>Deadline</label>
+              <input type="date" id="deadline-${job.jobId}" class="form-control" value="${job.deadline || ''}" />
+            </div>
+            <button onclick="updateJob('${job.jobId}')" class="btn btn-success">
+              <i class="fas fa-save"></i> Update
+            </button>
+            <button onclick="deleteJob('${job.jobId}')" class="btn btn-danger">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          `;
+          jobsContainer.appendChild(div);
         });
+        
+        container.appendChild(jobsContainer);
+      } catch (error) {
+        document.getElementById('jobs').innerHTML = '<p style="text-align: center; color: #e53e3e; padding: 40px;">Error loading jobs. Please try again later.</p>';
+      }
+    }
 
-        function showMessage(message, type) {
-            const messageDiv = document.getElementById("message");
-            messageDiv.textContent = message;
-            messageDiv.className = type;
-            messageDiv.style.display = "block";
-            setTimeout(() => {
-                messageDiv.style.display = "none";
-            }, 3000);
+    async function updateJob(id) {
+      const newTitle = document.getElementById(`title-${id}`).value;
+      const newDesc = document.getElementById(`desc-${id}`).value;
+      const newCompany = document.getElementById(`company-${id}`).value;
+      const newDeadline = document.getElementById(`deadline-${id}`).value;
+      
+      if (!newTitle || !newDesc || !newCompany) {
+        showMessage("All required fields must be filled!", "error");
+        return;
+      }
+
+      try {
+        await fetch(`${API}/jobs`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jobId: id,
+            title: newTitle,
+            description: newDesc,
+            deadline: newDeadline,
+            company: newCompany
+          })
+        });
+        showMessage("Job updated successfully!");
+        fetchJobs();
+      } catch (error) {
+        showMessage("Error updating job. Please try again.", "error");
+      }
+    }
+
+    let currentDeleteJobId = null;
+
+    async function deleteJob(id) {
+      const jobTitle = document.getElementById(`title-${id}`).value;
+      currentDeleteJobId = id;
+      
+      document.getElementById('deleteModalText').textContent = `Are you sure you want to delete the job "${jobTitle}"? This action cannot be undone.`;
+      document.getElementById('deleteModal').style.display = 'block';
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').style.display = 'none';
+      currentDeleteJobId = null;
+    }
+
+    async function confirmDelete() {
+      if (!currentDeleteJobId) return;
+      
+      const id = currentDeleteJobId;
+      const jobTitle = document.getElementById(`title-${id}`).value;
+      const jobDescription = document.getElementById(`desc-${id}`).value;
+      const jobCompany = document.getElementById(`company-${id}`).value;
+      const jobDeadline = document.getElementById(`deadline-${id}`).value;
+
+      try {
+        await fetch(`${API}/jobs`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jobId: id,
+            title: jobTitle,
+            description: jobDescription,
+            company: jobCompany,
+            deadline: jobDeadline
+          })
+        });
+        showMessage("Job deleted successfully!");
+        fetchJobs();
+      } catch (error) {
+        showMessage("Error deleting job. Please try again.", "error");
+      } finally {
+        closeDeleteModal();
+      }
+    }
+
+    document.getElementById('jobForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<div class="loading-spinner"></div> Adding...';
+      submitBtn.disabled = true;
+
+      try {
+        const title = document.getElementById('title').value;
+        const description = document.getElementById('description').value;
+        const company = document.getElementById('company').value;
+        const deadline = document.getElementById('deadline').value;
+        
+        await fetch(`${API}/jobs`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, description, deadline, company })
+        });
+        
+        showMessage("Job added successfully!");
+        document.getElementById('jobForm').reset();
+        fetchJobs();
+      } catch (error) {
+        showMessage("Error adding job. Please try again.", "error");
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+
+    async function loadApplications() {
+      try {
+        const res = await fetch(`${API}/applications`);
+        const apps = await res.json();
+        const container = document.getElementById('applications');
+        
+        if (apps.length === 0) {
+          container.innerHTML = '<p style="text-align: center; color: #4a5568; padding: 40px;">No applications received yet.</p>';
+          return;
         }
 
-        function openEditModal(productId, name, price, stock, imageUrl) {
-            document.getElementById("editProductId").value = productId; // Set the product ID
-            document.getElementById("editName").value = name;
-            document.getElementById("editPrice").value = price;
-            document.getElementById("editStock").value = stock;
-            document.getElementById("editImageUrl").value = imageUrl;
+        container.innerHTML = '';
+        apps.forEach(app => {
+          const div = document.createElement('div');
+          div.className = 'application-card';
+          div.innerHTML = `
+            <div class="app-header">
+              <div>
+                <div class="app-name">${app.name}</div>
+                <div class="app-contact">${app.email} | ${app.phone}</div>
+              </div>
+            </div>
+            <div class="app-details">
+              <span><i class="fas fa-calendar"></i> DOB: ${app.dob || 'Not provided'}</span>
+              <span><i class="fas fa-briefcase"></i> Job: ${app.jobname || 'Not specified'}</span>
+              <span><i class="fas fa-building"></i> Company: ${app.companyname || 'Not specified'}</span>
+            </div>
+            <div class="app-details">
+              <span><i class="fas fa-map-marker-alt"></i> Address: ${app.address || 'Not provided'}</span>
+            </div>
+            ${app.resumeUrl ? `<a href="${app.resumeUrl}" target="_blank" class="resume-link">
+              <i class="fas fa-download"></i> Download Resume
+            </a>` : '<span style="color: #a0aec0;"><i class="fas fa-file-pdf"></i> No resume uploaded</span>'}
+          `;
+          container.appendChild(div);
+        });
+      } catch (error) {
+        document.getElementById('applications').innerHTML = '<p style="text-align: center; color: #e53e3e; padding: 40px;">Error loading applications. Please try again later.</p>';
+      }
+    }
 
-            // Show image preview
-            const previewImage = document.getElementById("editPreviewImage");
-            if (imageUrl) {
-                previewImage.src = imageUrl;
-                previewImage.style.display = "block";
-            } else {
-                previewImage.style.display = "none";
-            }
+    fetchJobs();
+    loadApplications();
 
-            // Show modal
-            document.getElementById("editModal").style.display = "block";
-        }
-
-        function closeEditModal() {
-            document.getElementById("editModal").style.display = "none";
-        }
-
-        async function updateProduct() {
-            const updatedProduct = {
-                productId: document.getElementById("editProductId").value, // Use the hidden product ID field
-                name: document.getElementById("editName").value,
-                price: parseFloat(document.getElementById("editPrice").value),
-                stock: parseInt(document.getElementById("editStock").value),
-                imageUrl: document.getElementById("editImageUrl").value || "" // Ensure a valid image URL
-            };
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(updatedProduct)
-                });
-
-                if (!response.ok) throw new Error("Failed to update product");
-
-                showMessage("Product updated successfully!", "success");
-                closeEditModal(); // Close the modal after saving
-                fetchProducts();
-            } catch (error) {
-                console.error("Error updating product:", error);
-                showMessage("Error updating product: " + error.message, "error");
-            }
-        }
-
-        // --- Placed Orders Script ---
-        const ORDERS_API_URL = "https://bb9d35alf6.execute-api.us-east-1.amazonaws.com/prod/orders"; // replace
-
-        async function fetchOrders() {
-            try {
-                const res = await fetch(ORDERS_API_URL);
-                const data = await res.json();
-
-                const ordersDiv = document.getElementById("orders");
-                ordersDiv.innerHTML = "";
-
-                if (data.length === 0) {
-                    ordersDiv.innerHTML = "<p>No orders found.</p>";
-                    return;
-                }
-
-                data.forEach(order => {
-                    const orderBox = document.createElement("div");
-                    orderBox.className = "order-box";
-                    orderBox.innerHTML = `
-                        <h3>Order ID: ${order.orderId}</h3>
-                        <p><strong>Name:</strong> ${order.name}</p>
-                        <p><strong>Phone:</strong> ${order.phone}</p>
-                        <p><strong>Email:</strong> ${order.email}</p>
-                        <p><strong>Address:</strong> ${order.address}</p>
-                        <h4>Cart Items:</h4>
-                        <ul>
-                            ${order.cartItems.map(item => `<li>${item.productId} - Qty: ${item.quantity}</li>`).join("")}
-                        </ul>
-                    `;
-                    ordersDiv.appendChild(orderBox);
-                });
-            } catch (err) {
-                console.error("Error loading orders:", err);
-                document.getElementById("orders").innerHTML = "Error loading orders.";
-            }
-        }
-
-        fetchProducts();
-        fetchOrders();
-    </script>
-
+    // Close delete modal when clicking outside
+    window.onclick = function(event) {
+      const deleteModal = document.getElementById('deleteModal');
+      if (event.target == deleteModal) {
+        closeDeleteModal();
+      }
+    }
+  </script>
 </body>
 </html>
