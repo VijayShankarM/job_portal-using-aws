@@ -2,10 +2,10 @@ import json
 import boto3
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('ApplicantTable')
+table = dynamodb.Table('EnrollmentTable')  # 🗂 Renamed from ApplicantTable
 
 s3 = boto3.client('s3')
-BUCKET_NAME = 'job-res-port'
+BUCKET_NAME = 'course-docs-bucket'  # 🪣 Renamed from job-res-port
 
 def lambda_handler(event, context):
     try:
@@ -13,11 +13,11 @@ def lambda_handler(event, context):
         items = response.get('Items', [])
 
         for item in items:
-            resume_key = item.get('resumeKey')
-            if resume_key:
-                item['resumeUrl'] = s3.generate_presigned_url(
+            document_key = item.get('documentKey')  # 🧾 Renamed from resumeKey
+            if document_key:
+                item['documentUrl'] = s3.generate_presigned_url(
                     'get_object',
-                    Params={'Bucket': BUCKET_NAME, 'Key': resume_key},
+                    Params={'Bucket': BUCKET_NAME, 'Key': document_key},
                     ExpiresIn=300  # 5 minutes
                 )
 
